@@ -1,0 +1,13 @@
+{
+  "rewrites": [
+    { "source": "/games", "destination": "/api/games" },
+    { "source": "/games.xml", "destination": "/api/games" },
+    { "source": "/api/games.xml", "destination": "/api/games" },
+    { "source": "/tv", "destination": "/api/tv" },
+    { "source": "/tv.xml", "destination": "/api/tv" },
+    { "source": "/api/tv.xml", "destination": "/api/tv" },
+    { "source": "/all", "destination": "/api/all" },
+    { "source": "/all.xml", "destination": "/api/all" },
+    { "source": "/api/all.xml", "destination": "/api/all" }
+  ]
+}

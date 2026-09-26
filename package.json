@@ -1,0 +1,14 @@
+{
+  "name": "metacritic-rss",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Self-hosted RSS feeds for Metacritic game and TV listings.",
+  "scripts": {
+    "start": "node server.js",
+    "validate": "python3 scripts/validate-feeds.py"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
