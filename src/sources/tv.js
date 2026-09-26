@@ -21,7 +21,6 @@ const SHOW_TYPES = new Set(['show', 'season'])
 
 export const tvSource = {
   id: 'tv',
-  shortLabel: 'TV',
   title: 'Metacritic TV Shows',
   pageUrl: 'https://www.metacritic.com/tv/',
   description:

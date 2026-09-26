@@ -6,21 +6,14 @@ The games page (`https://www.metacritic.com/game/`) and the TV page (`https://ww
 
 ## Feed URLs
 
-On a local server:
+There are two feeds:
 
-| Feed | URL |
-| --- | --- |
-| Games | http://localhost:3000/api/games.xml |
-| TV shows | http://localhost:3000/api/tv.xml |
-| Games and TV | http://localhost:3000/api/all.xml |
+| Feed | Local | Deployed |
+| --- | --- | --- |
+| Games | http://localhost:3000/api/games.xml | `https://<your-project>.vercel.app/api/games.xml` |
+| TV shows | http://localhost:3000/api/tv.xml | `https://<your-project>.vercel.app/api/tv.xml` |
 
-The same feeds are also served at `/games`, `/games.xml`, `/tv`, `/tv.xml`, `/all`, and `/all.xml`.
-
-After you deploy, replace the host:
-
-- `https://<your-project>.vercel.app/api/games.xml`
-- `https://<your-project>.vercel.app/api/tv.xml`
-- `https://<your-project>.vercel.app/api/all.xml`
+The same two feeds are also available at `/games` and `/tv`.
 
 Each item includes a title, a link to the Metacritic page, and that same URL as a permalink `guid`. When the page provides them, the item also includes a Metascore, user score, release date, platform or network, genres, a short description, and a thumbnail (`media:content` and `enclosure`). `pubDate` is the release date at 12:00 GMT, so it stays the same between fetches. Items with no release date omit `pubDate` rather than using the current time.
 
@@ -35,7 +28,7 @@ No environment variables or build command are required.
 3. Leave the framework preset as **Other**. The root directory is the repository root. Install and build commands can stay empty; there are no npm dependencies.
 4. Deploy.
 
-Vercel serves `api/games.js`, `api/tv.js`, and `api/all.js` as Node.js serverless functions. `vercel.json` rewrites the shorter paths onto those functions. The homepage is the static file `public/index.html`.
+Vercel serves `api/games.js` and `api/tv.js` as Node.js serverless functions. `vercel.json` rewrites `/games` and `/tv` onto those functions. The homepage is the static file `public/index.html`.
 
 Hobby/free tier limits apply. The functions only run when the CDN cache misses, because of the `s-maxage` header.
 
@@ -57,7 +50,7 @@ With the server running in another terminal:
 python3 scripts/validate-feeds.py
 ```
 
-`npm run validate` does the same thing. The script starts its own server on port 3999, fetches both feeds plus the combined feed, and checks that the XML is RSS 2.0 with real items (titles, Metacritic links, stable guids, release-date `pubDate`s, scores, and thumbnails).
+`npm run validate` does the same thing. The script starts its own server on port 3999, fetches both feeds, and checks that the XML is RSS 2.0 with real items (titles, Metacritic links, stable guids, release-date `pubDate`s, scores, and thumbnails).
 
 ## Add another feed
 
@@ -72,7 +65,7 @@ Both pages currently share a door-page shape: a Nuxt payload key such as `loadPa
 To add a page, for example movies:
 
 1. Open the Metacritic page and confirm the HTML contains `<script id="__NUXT_DATA__">`. The payload key is the `loadPage:door:…` entry for that page. If the card JSON differs, map it in the new file instead of reusing the games or TV mapper.
-2. Add `src/sources/movies.js` that exports a source object with `id`, `title`, `pageUrl`, `description`, `shortLabel`, and `parse(html)`.
+2. Add `src/sources/movies.js` that exports a source object with `id`, `title`, `pageUrl`, `description`, and `parse(html)`.
 3. Register it in `src/sources/registry.js`.
 4. Add `api/movies.js`:
 
@@ -86,8 +79,6 @@ To add a page, for example movies:
 
 5. Add rewrites for `/movies` and `/movies.xml` in `vercel.json`. The local server picks up any id in the registry automatically (`/api/movies.xml` and `/movies`).
 6. Run `python3 scripts/validate-feeds.py` after extending the script if you want the new feed checked too.
-
-The combined feed includes every source in the registry.
 
 ## Limitations
 

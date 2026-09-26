@@ -179,23 +179,6 @@ def check_feed(name, spec, status, headers, body):
     return errors, samples, len(items)
 
 
-def check_combined(status, body):
-    errors = []
-    if status != 200:
-        errors.append(f"combined feed HTTP {status}")
-        return errors
-    try:
-        root = ET.fromstring(body)
-    except ET.ParseError as error:
-        return [f"combined feed XML did not parse: {error}"]
-    links = [child_text(item, "link") for item in root.findall("./channel/item")]
-    if not any(link.startswith("https://www.metacritic.com/game/") for link in links):
-        errors.append("combined feed has no game links")
-    if not any(link.startswith("https://www.metacritic.com/tv/") for link in links):
-        errors.append("combined feed has no TV links")
-    return errors
-
-
 def main():
     proc = subprocess.Popen(
         ["node", "server.js"],
@@ -219,8 +202,9 @@ def main():
             reports[name] = {"count": count, "samples": samples, "errors": errors}
             failures.extend(f"{name}: {error}" for error in errors)
 
-        status, _headers, body = fetch("/api/all.xml")
-        failures.extend(f"all: {error}" for error in check_combined(status, body))
+        removed_status, _removed_headers, _removed_body = fetch("/api/all.xml")
+        if removed_status != 404:
+            failures.append(f"combined feed /api/all.xml returned HTTP {removed_status}, expected 404")
 
         for name, report in reports.items():
             print(f"\n{name}: {report['count']} items")

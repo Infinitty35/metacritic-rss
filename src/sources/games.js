@@ -38,7 +38,6 @@ const PLATFORM_TAGS = {
 
 export const gamesSource = {
   id: 'games',
-  shortLabel: 'Games',
   title: 'Metacritic Games',
   pageUrl: 'https://www.metacritic.com/game/',
   description:

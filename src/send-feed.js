@@ -17,7 +17,7 @@ export function requestOrigin(req) {
 }
 
 function selfPath(sourceId) {
-  return sourceId === 'all' ? '/api/all.xml' : `/api/${sourceId}.xml`
+  return `/api/${sourceId}.xml`
 }
 
 export async function sendFeed(req, res, sourceId) {

@@ -10,9 +10,6 @@ const port = Number(process.env.PORT || 3000)
 
 function feedIdForPath(pathname) {
   const path = pathname.length > 1 ? pathname.replace(/\/+$/, '') : pathname
-  if (path === '/api/all' || path === '/api/all.xml' || path === '/all' || path === '/all.xml') {
-    return 'all'
-  }
   for (const id of Object.keys(sources)) {
     if ([`/api/${id}`, `/api/${id}.xml`, `/${id}`, `/${id}.xml`].includes(path)) return id
   }
@@ -51,5 +48,4 @@ server.listen(port, () => {
   console.log(`metacritic-rss listening on http://localhost:${port}`)
   console.log(`  games  http://localhost:${port}/api/games.xml`)
   console.log(`  tv     http://localhost:${port}/api/tv.xml`)
-  console.log(`  all    http://localhost:${port}/api/all.xml`)
 })
